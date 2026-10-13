@@ -22,11 +22,53 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("🎙️ Explainable Audio DSP + Machine Learning")
-st.caption(
-    "Phase 1: choose an audio source → choose an analysis mode → "
-    "click Start Analysis. Existing DSP and explainability features are retained."
-)
+# -------------------- Modern GUI theme --------------------
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap');
+:root { --ink:#14213d; --muted:#65738b; --blue:#3978f6; --violet:#7c5cff; --line:#e5ebf5; }
+html, body, [class*="css"] { font-family: Inter, "Noto Sans TC", sans-serif; }
+.stApp { background: linear-gradient(135deg,#f7f9ff 0%,#f5f7fc 52%,#f9f7ff 100%); color:var(--ink); }
+.block-container { max-width: 1500px; padding-top: 1.5rem; padding-bottom: 3rem; }
+[data-testid="stSidebar"] { background: linear-gradient(180deg,#172642 0%,#111c32 100%); border-right:1px solid #263957; }
+[data-testid="stSidebar"] * { color:#eef4ff; }
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color:#d0dcf1; }
+h1,h2,h3 { color:var(--ink); letter-spacing:-.035em; }
+h1 { font-weight:800 !important; }
+[data-testid="stMetric"] { background:linear-gradient(135deg,#ffffff,#f4f7ff); border:1px solid var(--line); padding:18px 20px; border-radius:18px; box-shadow:0 8px 24px rgba(36,58,100,.055); }
+[data-testid="stMetricLabel"] { color:#65738b !important; font-weight:600; }
+[data-testid="stMetricValue"] { color:#1d3e88 !important; font-weight:800; }
+div[data-testid="stVerticalBlockBorderWrapper"] { border-radius:18px; }
+.stButton > button[kind="primary"] { background:linear-gradient(90deg,#7165f5,#3978f6); border:0; border-radius:12px; min-height:3rem; font-weight:700; box-shadow:0 7px 18px rgba(67,105,245,.2); }
+.stButton > button[kind="primary"]:hover { border:0; filter:brightness(1.04); box-shadow:0 9px 24px rgba(67,105,245,.28); }
+.stButton > button, .stDownloadButton > button { border-radius:11px; }
+[data-testid="stFileUploader"] { background:#f1f5ff; border:1.5px dashed #9bb6ff; border-radius:16px; padding:12px; }
+[data-testid="stAudioInput"] { background:#fff5f6; border-radius:14px; padding:10px; }
+.stTabs [data-baseweb="tab-list"] { gap:8px; background:#fff; padding:8px; border:1px solid var(--line); border-radius:14px; }
+.stTabs [data-baseweb="tab"] { border-radius:10px; font-weight:600; }
+.stTabs [aria-selected="true"] { background:#edf3ff; color:#285ee8; }
+[data-testid="stDataFrame"], [data-testid="stTable"] { border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+hr { border-color:var(--line); }
+div[data-testid="stAlert"] { border-radius:12px; }
+.hero-card { padding:25px 28px; border-radius:22px; background:linear-gradient(110deg,#ffffff 0%,#eef4ff 65%,#f5efff 100%); border:1px solid #e2e9fa; box-shadow:0 10px 30px rgba(42,63,110,.06); margin-bottom:18px; }
+.hero-kicker { font-size:12px; font-weight:800; letter-spacing:.14em; color:#5578db; text-transform:uppercase; }
+.hero-title { font-size:clamp(27px,3vw,42px); font-weight:800; line-height:1.15; color:#14213d; margin:8px 0; }
+.hero-sub { font-size:15px; color:#65738b; margin-bottom:0; }
+.section-label { color:#315fce; font-size:12px; font-weight:800; letter-spacing:.12em; }
+@media (max-width: 768px) {
+  .block-container { padding-left:1rem; padding-right:1rem; }
+  .hero-card { padding:20px; }
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="hero-card">
+  <div class="hero-kicker">AI AUDIO LAB · DSP + MACHINE LEARNING</div>
+  <div class="hero-title">Explainable Audio DSP AI</div>
+  <p class="hero-sub">Understand every sound. 從聲音訊號、頻譜特徵到 AI 分類，讓每一次分析都有跡可循。</p>
+</div>
+""", unsafe_allow_html=True)
 
 with st.expander("📌 AI 分析流程：22 DSP Features → Random Forest → Explainability", expanded=True):
     st.markdown(
@@ -202,6 +244,13 @@ if train_df.empty and bundle and bundle.get("training_rows"):
         train_df = pd.DataFrame()
 
 # Sidebar settings and model metadata
+st.sidebar.markdown("""
+<div style="padding:8px 0 20px 0;">
+  <div style="font-size:12px;letter-spacing:.16em;font-weight:800;color:#7dd3fc;">● AUDIO INTELLIGENCE</div>
+  <div style="font-size:23px;line-height:1.2;font-weight:800;color:#ffffff;margin-top:8px;">Cat & Dog<br>Audio DSP AI</div>
+  <div style="font-size:12px;color:#b9c8e2;margin-top:8px;">Signal · Features · Prediction</div>
+</div>
+""", unsafe_allow_html=True)
 st.sidebar.header("⚙️ 模型設定")
 st.sidebar.write(f"模型檔案：`{MODEL_PATH.relative_to(ROOT)}`")
 st.sidebar.write(f"模型取樣率：{sr_model} Hz")
@@ -215,7 +264,8 @@ if bundle is None:
         st.sidebar.caption(model_load_error)
 
 # -------------------- Phase 1 input controls --------------------
-st.subheader("① Audio Input")
+st.markdown('<div class="section-label">01 / AUDIO SOURCE</div>', unsafe_allow_html=True)
+st.subheader("🎙️ Audio Input")
 
 input_source = st.radio(
     "選擇音訊來源",
@@ -371,7 +421,8 @@ if should_show_results:
 
         # -------------------- Results --------------------
         st.success("分析完成。")
-        st.subheader("② Audio DSP 分析")
+        st.markdown('<div class="section-label">02 / SIGNAL EXPLORER</div>', unsafe_allow_html=True)
+        st.subheader("Audio DSP 分析")
 
         if analysis_mode == "Cat / Dog Classification":
             st.subheader("AI 預測結果")
@@ -484,7 +535,8 @@ if should_show_results:
             st.pyplot(fig)
             plt.close(fig)
 
-        st.subheader("③ DSP Feature Values")
+        st.markdown('<div class="section-label">03 / FEATURE ENGINEERING</div>', unsafe_allow_html=True)
+        st.subheader("DSP Feature Values")
         feature_table = pd.DataFrame({
             "Feature": list(feats.keys()),
             "Value": list(feats.values()),
@@ -494,7 +546,8 @@ if should_show_results:
         # -------------------- Existing explainability features --------------------
         if analysis_mode == "Cat / Dog Classification" and bundle is not None:
             if hasattr(model, "feature_importances_"):
-                st.subheader("④ Global Feature Importance")
+                st.markdown('<div class="section-label">04 / MODEL EXPLAINABILITY</div>', unsafe_allow_html=True)
+                st.subheader("Global Feature Importance")
                 importances = np.asarray(model.feature_importances_)
                 if len(importances) == len(feature_names):
                     importance = pd.DataFrame({
