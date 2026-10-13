@@ -93,6 +93,35 @@ div[data-testid="stAlert"] { border-radius:12px; }
 .stApp [data-testid="stExpander"] [data-testid="stMarkdownContainer"] {
     color: #243450 !important;
 }
+
+/* Fix sidebar text contrast */
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+    color: #DCE7F8 !important;
+}
+
+[data-testid="stSidebar"] code {
+    color: #F8FAFC !important;
+    background: #253550 !important;
+}
+
+/* Fix analysis workflow expander */
+.stApp [data-testid="stExpander"] summary {
+    color: #F8FAFC !important;
+    background: #20232D !important;
+}
+
+.stApp [data-testid="stExpander"] summary p {
+    color: #F8FAFC !important;
+}
+
+/* Keep the workflow content readable */
+.stApp [data-testid="stExpander"] [data-testid="stMarkdownContainer"] p,
+.stApp [data-testid="stExpander"] [data-testid="stMarkdownContainer"] strong {
+    color: #243450 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
