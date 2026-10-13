@@ -59,6 +59,40 @@ div[data-testid="stAlert"] { border-radius:12px; }
   .block-container { padding-left:1rem; padding-right:1rem; }
   .hero-card { padding:20px; }
 }
+/* Improve contrast on light background */
+.stApp,
+[data-testid="stAppViewContainer"] {
+    color: #14213d !important;
+}
+
+.stApp label,
+.stApp [data-testid="stMarkdownContainer"] p,
+.stApp [data-testid="stWidgetLabel"] p {
+    color: #243450 !important;
+}
+
+.stApp [data-testid="stFileUploader"] {
+    background: #ffffff !important;
+    border: 1.5px dashed #8aa9ff !important;
+    border-radius: 16px !important;
+}
+
+.stApp [data-testid="stFileUploader"] * {
+    color: #243450 !important;
+}
+
+.stApp [data-testid="stRadio"] label,
+.stApp [data-testid="stSelectbox"] label {
+    color: #243450 !important;
+}
+
+.stApp [data-testid="stExpander"] summary {
+    color: #243450 !important;
+}
+
+.stApp [data-testid="stExpander"] [data-testid="stMarkdownContainer"] {
+    color: #243450 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
