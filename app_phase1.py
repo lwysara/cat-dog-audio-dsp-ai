@@ -978,3 +978,14 @@ Prediction + DSP Plots + Explainability
     except Exception as exc:
         st.error(f"音訊分析失敗：{exc}")
         st.exception(exc)
+        
+# ===== Kitten & Puppy Illustration =====
+pet_image_path = ROOT / "assets" / "kitten_puppy.png"
+
+if pet_image_path.exists():
+    st.image(
+        str(pet_image_path),
+        caption="Little paws, big discoveries 🐾",
+        use_container_width=True,
+    )
+
