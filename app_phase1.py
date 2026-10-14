@@ -50,6 +50,17 @@ div[data-testid="stVerticalBlockBorderWrapper"] { border-radius:18px; }
 [data-testid="stDataFrame"], [data-testid="stTable"] { border:1px solid var(--line); border-radius:12px; overflow:hidden; }
 hr { border-color:var(--line); }
 div[data-testid="stAlert"] { border-radius:12px; }
+/* Make the AI workflow expander title warm and lighter, not dark */
+[data-testid="stExpander"] details summary,
+[data-testid="stExpander"] details summary p,
+[data-testid="stExpander"] details summary span {
+    color: #c46c56 !important;
+    font-weight: 700 !important;
+}
+[data-testid="stExpander"] details summary svg {
+    color: #c46c56 !important;
+    fill: #c46c56 !important;
+}
 .hero-card { padding:25px 28px; border-radius:22px; background:linear-gradient(110deg,#fffefa 0%,#fff0e5 58%,#ffe7e8 100%); border:1px solid #f1d8ca; box-shadow:0 10px 30px rgba(133,83,61,.07); margin-bottom:18px; }
 .hero-kicker { font-size:12px; font-weight:800; letter-spacing:.14em; color:#c46c56; text-transform:uppercase; }
 .hero-title { font-size:clamp(27px,3vw,42px); font-weight:800; line-height:1.15; color:#49352d; margin:8px 0; }
