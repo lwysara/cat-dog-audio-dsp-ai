@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cat-Dog Audio DSP AI</title>
+
+  <style>
+    :root {
+      --bg: #fff9f2;
+      --card: #ffffff;
+      --primary: #bd7955;
+      --primary-dark: #925638;
+      --text: #49382f;
+      --muted: #88776b;
+      --accent: #f4e2d3;
+      --green: #65836c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Noto Sans TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 17px;
+    }
+
+    header {
+      padding: 25px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #f7e5d7, #fff5e9);
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 42px);
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .container {
+      width: min(1000px, 92%);
+      margin: 30px auto;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 25px 10px;
+    }
+
+    .pets {
+      font-size: 64px;
+      margin-bottom: 10px;
+    }
+
+    .hero h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid #f0e3d8;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 5px 18px #7650390d;
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .description {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      margin: 20px 0;
+      padding: 12px;
+      border: 1px dashed #cba78f;
+      border-radius: 12px;
+      background: #fffaf6;
+      font-size: 15px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 18px;
+      background: var(--primary);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .secondary {
+      background: #ead6c6;
+      color: var(--text);
+    }
+
+    .secondary:hover {
+      background: #dfc1aa;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    audio {
+      display: block;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 12px;
+      background: #f8f0e8;
+      border-radius: 10px;
+      color: var(--muted);
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .results {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .metric {
+      background: #fff8f1;
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .metric .value {
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 10px 0;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .notice {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 650px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .results {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🐱 Cat-Dog Audio DSP AI 🐶</h1>
+    <p>Audio Engineering · Digital Signal Processing · AI</p>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <div class="pets">🐱 🎵 🐶</div>
+      <h2>AI Audio Analysis Studio</h2>
+      <p>
+        Upload an audio file or record a sound.<br>
+        Explore audio signals, DSP features and anomaly detection.
+      </p>
+    </section>
+
+    <section class="grid">
+
+      <div class="card">
+        <h3>📁 Upload Audio</h3>
+        <p class="description">
+          上傳 WAV、MP3 或其他瀏覽器支援的音訊格式。
+        </p>
+
+        <input
+          type="file"
+          id="audioFile"
+          accept="audio/*"
+        >
+
+        <div id="uploadStatus" class="status">
+          尚未選擇音訊檔案
+        </div>
+
+        <audio id="audioPlayer" controls hidden></audio>
+      </div>
+
+      <div class="card">
+        <h3>🎙️ Record Audio</h3>
+        <p class="description">
+          使用電腦或手機麥克風錄製聲音。
+          第一次使用時請允許瀏覽器存取麥克風。
+        </p>
+
+        <div class="actions">
+          <button id="startRecord">🎙️ 開始錄音</button>
+          <button id="stopRecord" class="secondary" disabled>
+            ⏹ 停止錄音
+          </button>
+        </div>
+
+        <div id="recordStatus" class="status">
+          等待開始錄音
+        </div>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h3>🔬 Audio DSP Analysis</h3>
+      <p class="description">
+        分析目前選取或錄製的音訊，取得基本訊號特徵。
+      </p>
+
+      <button id="analyzeButton" disabled>
+        ▶ 開始 DSP 分析
+      </button>
+
+      <div id="analysisStatus" class="status">
+        請先上傳音訊或完成錄音。
+      </div>
+
+      <div class="results" style="margin-top:20px">
+        <div class="metric">
+          <div class="label">Duration</div>
+          <div class="value" id="duration">--</div>
+          <div class="label">秒</div>
+        </div>
+
+        <div class="metric">
+          <div class="label">RMS Amplitude</div>
+          <div class="value" id="rms">--</div>
+          <div class="label">均方根振幅</div>
+        </div>
+
+        <div class="metric">
+          <div class="label">Peak Amplitude</div>
+          <div class="value" id="peak">--</div>
+          <div class="label">峰值振幅</div>
+        </div>
+      </div>
+
+      <p class="notice" style="margin-top:20px">
+        注意：以上數值為瀏覽器端基本訊號分析結果。
+        此範例尚未連接已訓練的 Random Forest、
+        CNN 或貓狗聲音分類模型。
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    Cat-Dog Audio DSP AI · Built for Audio Engineering
+  </footer>
+
+  <script>
+    const fileInput = document.getElementById("audioFile");
+    const player = document.getElementById("audioPlayer");
+    const uploadStatus = document.getElementById("uploadStatus");
+    const recordStatus = document.getElementById("recordStatus");
+    const analysisStatus = document.getElementById("analysisStatus");
+
+    const startButton = document.getElementById("startRecord");
+    const stopButton = document.getElementById("stopRecord");
+    const analyzeButton = document.getElementById("analyzeButton");
+
+    let currentBlob = null;
+    let mediaRecorder = null;
+    let stream = null;
+    let chunks = [];
+    let objectURL = null;
+
+    function setAudio(blob, name) {
+      currentBlob = blob;
+
+      if (objectURL) {
+        URL.revokeObjectURL(objectURL);
+      }
+
+      objectURL = URL.createObjectURL(blob);
+      player.src = objectURL;
+      player.hidden = false;
+      analyzeButton.disabled = false;
+
+      analysisStatus.textContent =
+        "音訊已準備完成，可以開始 DSP 分析。";
+
+      if (name) {
+        uploadStatus.textContent = "已選取：" + name;
+      }
+    }
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+
+      if (!file) return;
+
+      if (!file.type.startsWith("audio/")) {
+        uploadStatus.textContent = "請選擇有效的音訊檔案。";
+        return;
+      }
+
+      setAudio(file, file.name);
+    });
+
+    startButton.addEventListener("click", async () => {
+      try {
+        if (!navigator.mediaDevices?.getUserMedia) {
+          throw new Error(
+            "瀏覽器不支援麥克風，請使用 HTTPS 網址或 localhost。"
+          );
+        }
+
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: true
+        });
+
+        chunks = [];
+
+        const mimeTypes = [
+          "audio/webm;codecs=opus",
+          "audio/webm",
+          "audio/mp4"
+        ];
+
+        const supportedType = mimeTypes.find(
+          type => MediaRecorder.isTypeSupported(type)
+        );
+
+        mediaRecorder = supportedType
+          ? new MediaRecorder(stream, { mimeType: supportedType })
+          : new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = event => {
+          if (event.data.size > 0) {
+            chunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(chunks, {
+            type: mediaRecorder.mimeType || "audio/webm"
+          });
+
+          setAudio(blob);
+
+          recordStatus.textContent =
+            "錄音完成，可以播放或開始分析。";
+
+          stream?.getTracks().forEach(track => track.stop());
+          stream = null;
+        };
+
+        mediaRecorder.start();
+
+        startButton.disabled = true;
+        stopButton.disabled = false;
+
+        recordStatus.textContent =
+          "🔴 正在錄音中，完成後請按停止錄音。";
+
+      } catch (error) {
+        recordStatus.textContent =
+          "無法啟動麥克風：" + error.message;
+      }
+    });
+
+    stopButton.addEventListener("click", () => {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+
+      startButton.disabled = false;
+      stopButton.disabled = true;
+    });
+
+    analyzeButton.addEventListener("click", async () => {
+      if (!currentBlob) {
+        analysisStatus.textContent = "請先準備音訊。";
+        return;
+      }
+
+      analyzeButton.disabled = true;
+      analysisStatus.textContent = "正在計算訊號特徵……";
+
+      try {
+        const arrayBuffer = await currentBlob.arrayBuffer();
+        const audioContext = new AudioContext();
+
+        try {
+          const audioBuffer =
+            await audioContext.decodeAudioData(arrayBuffer);
+
+          const samples = audioBuffer.getChannelData(0);
+
+          let sumSquares = 0;
+          let peakAmplitude = 0;
+
+          for (let i = 0; i < samples.length; i++) {
+            const value = samples[i];
+
+            sumSquares += value * value;
+            peakAmplitude = Math.max(
+              peakAmplitude,
+              Math.abs(value)
+            );
+          }
+
+          const rmsAmplitude = Math.sqrt(
+            sumSquares / samples.length
+          );
+
+          document.getElementById("duration").textContent =
+            audioBuffer.duration.toFixed(2);
+
+          document.getElementById("rms").textContent =
+            rmsAmplitude.toFixed(4);
+
+          document.getElementById("peak").textContent =
+            peakAmplitude.toFixed(4);
+
+          analysisStatus.textContent =
+            "分析完成！取樣率：" +
+            audioBuffer.sampleRate +
+            " Hz；樣本數：" +
+            samples.length.toLocaleString();
+
+        } finally {
+          await audioContext.close();
+        }
+
+      } catch (error) {
+        analysisStatus.textContent =
+          "分析失敗，請確認檔案格式是否受到瀏覽器支援。";
+      } finally {
+        analyzeButton.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
