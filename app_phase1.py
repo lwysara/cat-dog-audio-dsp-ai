@@ -122,6 +122,81 @@ div[data-testid="stAlert"] { border-radius:12px; }
     color: #243450 !important;
 }
 
+/* ===== Warm cream + peach + coral theme ===== */
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #FFF9F1 0%,
+        #FFF1E4 55%,
+        #FFF0F1 100%
+    ) !important;
+    color: #49352F !important;
+}
+
+[data-testid="stSidebar"] {
+    background: linear-gradient(
+        180deg,
+        #FFF0DD 0%,
+        #FFE5D5 55%,
+        #FADBD8 100%
+    ) !important;
+    border-right: 1px solid #F3D2BE;
+}
+
+[data-testid="stSidebar"] *,
+.stApp label,
+.stApp [data-testid="stMarkdownContainer"] p {
+    color: #654B42;
+}
+
+h1, h2, h3 {
+    color: #49352F !important;
+}
+
+[data-testid="stMetric"] {
+    background: rgba(255,255,255,.88);
+    border: 1px solid #F3DCCB;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgba(135,82,55,.06);
+}
+
+[data-testid="stFileUploader"] {
+    background: #FFFFFF;
+    border: 2px dashed #F0A49A;
+    border-radius: 17px;
+}
+
+.stButton > button[kind="primary"] {
+    background: linear-gradient(90deg, #F47C73, #FFB36B);
+    color: #FFFFFF !important;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    background: rgba(255,255,255,.8);
+    border: 1px solid #F3DCCB;
+    border-radius: 15px;
+    padding: 8px;
+}
+
+.stTabs [aria-selected="true"] {
+    background: #FFE2D6;
+    color: #C85D58;
+}
+
+[data-testid="stExpander"] {
+    background: rgba(255,255,255,.8);
+    border: 1px solid #F0D6C5;
+    border-radius: 14px;
+}
+
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] summary * {
+    color: #654B42 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
