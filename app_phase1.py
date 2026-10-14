@@ -24,6 +24,45 @@ st.set_page_config(
 
 # -------------------- Modern GUI theme --------------------
 st.markdown("""
+<div style="
+    padding: 28px 30px;
+    border-radius: 24px;
+    border: 1px solid #F6DCC8;
+    background: linear-gradient(
+        115deg, #FFFFFF 0%, #FFF0DE 58%, #FFE7EA 100%
+    );
+    box-shadow: 0 12px 34px rgba(135,82,55,.09);
+    margin-bottom: 20px;
+">
+    <div style="
+        color: #E56D63;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: .15em;
+    ">
+        🐾 AI AUDIO LAB · DSP + MACHINE LEARNING
+    </div>
+
+    <h1 style="
+        color: #49352F;
+        font-size: clamp(28px, 3vw, 44px);
+        margin: 10px 0;
+    ">
+        Explainable
+        <span style="color:#F47C73;">Audio DSP AI</span> 🐾
+    </h1>
+
+    <p style="color:#8B7167;font-size:16px;">
+        Understand every sound.
+        從聲音訊號、頻譜特徵到 AI 分類，讓每一次分析都有跡可循。
+    </p>
+
+    <div style="font-size:14px;color:#77564A;margin-top:16px;">
+        🎚️ Audio DSP　　🧠 Machine Learning　　🔎 Explainability
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap');
 :root { --ink:#14213d; --muted:#65738b; --blue:#3978f6; --violet:#7c5cff; --line:#e5ebf5; }
