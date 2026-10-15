@@ -58,39 +58,39 @@ div[data-testid="stVerticalBlockBorderWrapper"] { border-radius: 18px; }
 [data-testid="stFileUploader"] { background: #FFF1E8 !important; border: 1.5px dashed #D9A995; border-radius: 16px; padding: 12px; }
 [data-testid="stAudioInput"] { background: #FFF1E8 !important; border-radius: 14px; padding: 10px; }
 
-/* Warm four-tab navigation: all tab labels and nested elements stay readable */
-.stTabs, div[data-testid="stTabs"] { margin-top: 12px; }
+/* Audio DSP tabs: preserve the reference layout, recolor with a warm palette */
+.stTabs, div[data-testid="stTabs"] {
+  margin-top: 12px !important;
+}
 .stTabs [data-baseweb="tab-list"],
 div[data-testid="stTabs"] [role="tablist"] {
   display: flex !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
   align-items: stretch !important;
-  gap: 8px !important;
-  background: var(--page) !important;
-  padding: 8px 0 !important;
-  border-bottom: 2px solid var(--line) !important;
+  gap: 26px !important;
+  background: transparent !important;
+  padding: 8px 0 0 0 !important;
+  border-bottom: 2px solid #EADBD0 !important;
+  overflow-x: auto !important;
 }
 .stTabs [data-baseweb="tab"],
 div[data-testid="stTabs"] button[data-baseweb="tab"],
 div[data-testid="stTabs"] button[role="tab"],
 div[data-testid="stTabs"] [role="tab"] {
+  appearance: none !important;
   box-sizing: border-box !important;
-  min-height: 48px !important;
-  padding: 10px 16px !important;
+  min-height: 52px !important;
+  padding: 10px 0 13px 0 !important;
   margin: 0 !important;
-  background: var(--tab-bg) !important;
-  color: var(--ink) !important;
-  -webkit-text-fill-color: var(--ink) !important;
-  border: 1px solid var(--line) !important;
+  background: transparent !important;
+  color: #6B4A3E !important;
+  -webkit-text-fill-color: #6B4A3E !important;
+  border: 0 !important;
   border-bottom: 4px solid transparent !important;
-  border-radius: 10px 10px 0 0 !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 1.4 !important;
+  border-radius: 0 !important;
+  font-size: 22px !important;
+  font-weight: 650 !important;
+  line-height: 1.35 !important;
   opacity: 1 !important;
   box-shadow: none !important;
   text-shadow: none !important;
-}
-.stTabs [data-baseweb="tab"] *,
-div[data-testid="stTabs"] button[data-baseweb="tab"] *,
-div[data-testid="stTabs"] button[role="tab"] *,
