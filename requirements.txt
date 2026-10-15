@@ -7,3 +7,4 @@ scipy
 scikit-learn
 soundfile
 joblib
+streamlit-mic-recorder
