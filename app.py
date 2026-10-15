@@ -26,6 +26,8 @@ st.markdown("""
   --audio-text: #633D32;
   --audio-muted: #89695D;
   --audio-border: #E7CFC2;
+  --audio-title: #633D32;
+  --audio-kicker: #C9654D;
 }
 
 html, body, .stApp, [data-testid="stAppViewContainer"] {
@@ -92,5 +94,3 @@ div[data-testid="stTabs"] [role="tab"]:hover {
 
 div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"],
 div[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
-  background: var(--audio-active) !important;
-  color: #8E382D !important;
