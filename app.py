@@ -75,8 +75,13 @@ h3, [data-testid="stHeading"] h3 {
 
 /* Tabs */
 .stTabs [data-baseweb="tab"] {
+    color: #5B4036 !important;
     font-size: 18px !important;
     font-weight: 600 !important;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    color: #B84F3D !important;
 }
 
 /* Metrics / KPI cards */
