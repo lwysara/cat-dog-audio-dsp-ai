@@ -8,3 +8,5 @@ scikit-learn
 soundfile
 joblib
 streamlit-mic-recorder
+streamlit-webrtc
+av
