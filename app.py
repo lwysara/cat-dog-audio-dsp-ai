@@ -16,81 +16,81 @@ st.set_page_config(page_title="Cat & Dog Audio DSP AI", page_icon="🐱", layout
 # ------------------------------------------------------------------
 st.markdown("""
 <style>
-/* Warm palette: use strong selectors because Streamlit/BaseWeb themes can override tabs. */
 :root {
   --audio-bg: #FFF8F2;
-  --audio-tab-bg: #F8EDE5;
-  --audio-active-bg: #FFE5D9;
-  --audio-accent: #D95F50;
+  --audio-surface: #FFFCF9;
+  --audio-tab: #F3E5DB;
+  --audio-tab-hover: #EED5C8;
+  --audio-active: #FFE1D4;
+  --audio-accent: #D65D50;
   --audio-text: #633D32;
-  --audio-border: #E8CFC1;
+  --audio-muted: #89695D;
+  --audio-border: #E7CFC2;
 }
+
 html, body, .stApp, [data-testid="stAppViewContainer"] {
   background: var(--audio-bg) !important;
 }
 
-/* Tab bar background and spacing */
-.stTabs, [data-testid="stTabs"] { margin-top: 12px; }
-.stTabs [data-baseweb="tab-list"],
-[data-testid="stTabs"] [role="tablist"] {
+/* Four-tab navigation: warm cards, strong contrast, and a clear active state. */
+div[data-testid="stTabs"] { margin-top: 14px !important; }
+div[data-testid="stTabs"] [data-baseweb="tab-list"],
+div[data-testid="stTabs"] [role="tablist"] {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: stretch !important;
-  gap: 8px !important;
-  background: var(--audio-bg) !important;
-  padding: 8px 0 0 !important;
-  border-bottom: 2px solid var(--audio-border) !important;
+  gap: 10px !important;
+  padding: 10px 2px 12px !important;
+  background: transparent !important;
+  border-bottom: 1px solid var(--audio-border) !important;
 }
 
-/* Target both current and alternate Streamlit tab markup */
-.stTabs button[data-baseweb="tab"],
-.stTabs [role="tab"],
-[data-testid="stTabs"] button[role="tab"] {
+div[data-testid="stTabs"] button[data-baseweb="tab"],
+div[data-testid="stTabs"] [role="tab"] {
+  appearance: none !important;
   box-sizing: border-box !important;
-  min-height: 54px !important;
-  padding: 12px 18px !important;
+  min-height: 52px !important;
+  padding: 11px 18px !important;
   margin: 0 !important;
-  background: var(--audio-tab-bg) !important;
-  color: var(--audio-text) !important;
   border: 1px solid var(--audio-border) !important;
-  border-bottom: 4px solid transparent !important;
-  border-radius: 10px 10px 0 0 !important;
-  font-size: 17px !important;
-  font-weight: 750 !important;
-  line-height: 1.45 !important;
-  opacity: 1 !important;
-  box-shadow: none !important;
-}
-.stTabs button[data-baseweb="tab"] *,
-.stTabs [role="tab"] *,
-[data-testid="stTabs"] button[role="tab"] * {
+  border-bottom: 3px solid transparent !important;
+  border-radius: 12px !important;
+  background: var(--audio-tab) !important;
   color: var(--audio-text) !important;
-  font-size: 17px !important;
+  -webkit-text-fill-color: var(--audio-text) !important;
+  font-size: 16px !important;
   font-weight: 750 !important;
+  line-height: 1.35 !important;
   opacity: 1 !important;
+  box-shadow: 0 2px 5px rgba(99, 61, 50, .05) !important;
+  transition: background-color .15s ease, border-color .15s ease, transform .15s ease !important;
+}
+
+/* Streamlit versions wrap tab labels in different nested elements; force readable color on all. */
+div[data-testid="stTabs"] button[data-baseweb="tab"] *,
+div[data-testid="stTabs"] [role="tab"] *,
+div[data-testid="stTabs"] button[data-baseweb="tab"] p,
+div[data-testid="stTabs"] [role="tab"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"] span,
+div[data-testid="stTabs"] [role="tab"] span,
+div[data-testid="stTabs"] button[data-baseweb="tab"] svg,
+div[data-testid="stTabs"] [role="tab"] svg {
+  color: var(--audio-text) !important;
+  -webkit-text-fill-color: var(--audio-text) !important;
   fill: var(--audio-text) !important;
-}
-.stTabs button[data-baseweb="tab"]:hover,
-.stTabs [role="tab"]:hover,
-[data-testid="stTabs"] button[role="tab"]:hover {
-  background: #F4DCCF !important;
-  border-color: #D9AFA0 !important;
-}
-.stTabs button[data-baseweb="tab"][aria-selected="true"],
-.stTabs [role="tab"][aria-selected="true"],
-[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-  background: var(--audio-active-bg) !important;
-  color: #8E382D !important;
-  border: 1px solid #E8B5A5 !important;
-  border-bottom: 4px solid var(--audio-accent) !important;
-  font-weight: 800 !important;
-}
-.stTabs button[data-baseweb="tab"][aria-selected="true"] *,
-.stTabs [role="tab"][aria-selected="true"] *,
-[data-testid="stTabs"] button[role="tab"][aria-selected="true"] * {
-  color: #8E382D !important;
-  font-weight: 800 !important;
   opacity: 1 !important;
-  fill: #8E382D !important;
+  text-shadow: none !important;
+  font-weight: 750 !important;
 }
-.stTabs button[data-baseweb="tab"]:focus-visible,
+
+div[data-testid="stTabs"] button[data-baseweb="tab"]:hover,
+div[data-testid="stTabs"] [role="tab"]:hover {
+  background: var(--audio-tab-hover) !important;
+  border-color: #D7AD9D !important;
+  transform: translateY(-1px) !important;
+}
+
+div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"],
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
+  background: var(--audio-active) !important;
+  color: #8E382D !important;
