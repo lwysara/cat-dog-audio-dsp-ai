@@ -26,7 +26,7 @@ import streamlit as st
 from scipy.signal import butter, sosfilt
 
 # ============================================================
-# Explainable Audio DSP AI — Phase 1 integration
+# Audio DSP AI ＋ Machine Learning — Phase 1 integration
 # Keeps the existing model bundle contract and DSP explanations.
 # ============================================================
 
