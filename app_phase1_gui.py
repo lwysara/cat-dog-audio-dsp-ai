@@ -44,9 +44,65 @@ div[data-testid="stVerticalBlockBorderWrapper"] { border-radius:18px; }
 .stButton > button, .stDownloadButton > button { border-radius:11px; }
 [data-testid="stFileUploader"] { background:#f1f5ff; border:1.5px dashed #9bb6ff; border-radius:16px; padding:12px; }
 [data-testid="stAudioInput"] { background:#fff5f6; border-radius:14px; padding:10px; }
-.stTabs [data-baseweb="tab-list"] { gap:8px; background:#fff; padding:8px; border:1px solid var(--line); border-radius:14px; }
-.stTabs [data-baseweb="tab"] { border-radius:10px; font-weight:600; }
-.stTabs [aria-selected="true"] { background:#edf3ff; color:#285ee8; }
+
+/* Warm Audio DSP tabs */
+.stTabs [data-baseweb="tab-list"],
+div[data-testid="stTabs"] [role="tablist"] {
+    gap: 8px !important;
+    background: #FFF8F2 !important;
+    padding: 8px 0 !important;
+    border-bottom: 2px solid #EED5C6 !important;
+}
+
+/* All four tabs: warm background and dark brown text */
+.stTabs [data-baseweb="tab"],
+div[data-testid="stTabs"] button[role="tab"],
+div[data-testid="stTabs"] [role="tab"] {
+    background: #F8EDE5 !important;
+    color: #633D32 !important;
+    -webkit-text-fill-color: #633D32 !important;
+    border: 1px solid #EED5C6 !important;
+    border-bottom: 4px solid transparent !important;
+    border-radius: 10px 10px 0 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+}
+
+/* Force nested labels, paragraphs, spans and icons to use dark brown */
+.stTabs [data-baseweb="tab"] *,
+div[data-testid="stTabs"] button[role="tab"] *,
+div[data-testid="stTabs"] [role="tab"] * {
+    color: #633D32 !important;
+    -webkit-text-fill-color: #633D32 !important;
+    fill: #633D32 !important;
+    opacity: 1 !important;
+}
+
+/* Hover */
+div[data-testid="stTabs"] [role="tab"]:hover {
+    background: #F4DCCF !important;
+    border-color: #D7AD9D !important;
+}
+
+/* Selected tab */
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
+    background: #FFE5D9 !important;
+    color: #8E382D !important;
+    -webkit-text-fill-color: #8E382D !important;
+    border-color: #E8B5A5 !important;
+    border-bottom: 4px solid #E85D4F !important;
+}
+
+/* Selected tab: force all nested text to remain readable */
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"] *,
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"] p {
+    color: #8E382D !important;
+    -webkit-text-fill-color: #8E382D !important;
+    fill: #8E382D !important;
+    opacity: 1 !important;
+}
+
 [data-testid="stDataFrame"], [data-testid="stTable"] { border:1px solid var(--line); border-radius:12px; overflow:hidden; }
 hr { border-color:var(--line); }
 div[data-testid="stAlert"] { border-radius:12px; }
