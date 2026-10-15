@@ -31,7 +31,7 @@ from scipy.signal import butter, sosfilt
 # ============================================================
 
 st.set_page_config(
-    page_title="Explainable Audio DSP AI",
+    page_title="Audio DSP AI ＋ Machine Learning",
     page_icon="🎙️",
     layout="wide",
 )
