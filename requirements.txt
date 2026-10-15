@@ -1,12 +1,10 @@
-streamlit>=1.39.0
+
+streamlit
 numpy
 pandas
 librosa
 matplotlib
+joblib
 scipy
 scikit-learn
 soundfile
-joblib
-streamlit-mic-recorder
-streamlit-webrtc
-av
