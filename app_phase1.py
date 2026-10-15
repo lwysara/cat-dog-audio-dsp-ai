@@ -12,7 +12,7 @@ import streamlit as st
 from scipy.signal import butter, sosfilt
 
 # ============================================================
-# Audio DSP AI ＋ Machine Learning — Phase 1 integration
+# Explainable Audio DSP AI — Phase 1 integration
 # Keeps the existing model bundle contract and DSP explanations.
 # ============================================================
 
@@ -42,22 +42,6 @@ div[data-testid="stVerticalBlockBorderWrapper"] { border-radius:18px; }
 .stButton > button[kind="primary"] { background:linear-gradient(90deg,#e9856e,#d96b70); color:white; border:0; border-radius:12px; min-height:3rem; font-weight:700; box-shadow:0 7px 18px rgba(217,107,112,.2); }
 .stButton > button[kind="primary"]:hover { border:0; filter:brightness(1.04); box-shadow:0 9px 24px rgba(217,107,112,.28); }
 .stButton > button, .stDownloadButton > button { border-radius:11px; }
-/* Audio source selector buttons: readable text and comfortable touch targets. */
-div[data-testid="stButton"] > button {
-    min-height: 3.1rem;
-    font-weight: 700;
-    font-size: 1rem;
-    border: 1px solid #e9b5a4;
-}
-div[data-testid="stButton"] > button[kind="secondary"] {
-    background: #fffaf5;
-    color: #65483d !important;
-}
-div[data-testid="stButton"] > button[kind="primary"] {
-    background: linear-gradient(90deg, #e9856e, #d96b70);
-    color: #ffffff !important;
-    border: 0;
-}
 [data-testid="stFileUploader"] { background:#fff7f0; border:1.5px dashed #e9b5a4; border-radius:16px; padding:12px; }
 [data-testid="stAudioInput"] { background:#fff0ed; border-radius:14px; padding:10px; }
 .stTabs [data-baseweb="tab-list"] { gap:8px; background:#fff; padding:8px; border:1px solid var(--line); border-radius:14px; }
@@ -66,17 +50,6 @@ div[data-testid="stButton"] > button[kind="primary"] {
 [data-testid="stDataFrame"], [data-testid="stTable"] { border:1px solid var(--line); border-radius:12px; overflow:hidden; }
 hr { border-color:var(--line); }
 div[data-testid="stAlert"] { border-radius:12px; }
-/* Make the AI workflow expander title warm and lighter, not dark */
-[data-testid="stExpander"] details summary,
-[data-testid="stExpander"] details summary p,
-[data-testid="stExpander"] details summary span {
-    color: #c46c56 !important;
-    font-weight: 700 !important;
-}
-[data-testid="stExpander"] details summary svg {
-    color: #c46c56 !important;
-    fill: #c46c56 !important;
-}
 .hero-card { padding:25px 28px; border-radius:22px; background:linear-gradient(110deg,#fffefa 0%,#fff0e5 58%,#ffe7e8 100%); border:1px solid #f1d8ca; box-shadow:0 10px 30px rgba(133,83,61,.07); margin-bottom:18px; }
 .hero-kicker { font-size:12px; font-weight:800; letter-spacing:.14em; color:#c46c56; text-transform:uppercase; }
 .hero-title { font-size:clamp(27px,3vw,42px); font-weight:800; line-height:1.15; color:#49352d; margin:8px 0; }
@@ -93,3 +66,31 @@ st.markdown("""
   <p class="hero-sub">Understand every sound. 從聲音訊號、頻譜特徵到 AI 分類，讓每一次分析都有跡可循。</p>
 </div>
 """, unsafe_allow_html=True)
+
+with st.expander("📌 AI 分析流程：22 DSP Features → Random Forest → Explainability", expanded=True):
+    st.markdown(
+        """
+**Audio Input → DSP Processing → 22 DSP Features**  
+↓  
+**Cat / Dog Random Forest**（僅在 `Cat / Dog Classification` 模式執行）  
+↓  
+**Prediction + DSP Plots + Explainability**
+
+分類模式會使用已載入模型與對應的 StandardScaler 進行預測；
+`Audio DSP Analysis Only` 模式只執行 DSP 分析，不會執行 Cat/Dog 分類。
+"""
+    )
+
+ROOT = Path(__file__).resolve().parent
+MODEL_PATH = ROOT / "models" / "cat_dog_model.joblib"
+FEATURE_DATA_PATH = ROOT / "data" / "feature_dataset.csv"
+
+# Optional horizontal kitten-and-puppy illustration. Upload the image to
+# the repository at assets/kitten_puppy.png; the app still runs without it.
+PET_IMAGE_PATH = ROOT / "assets" / "kitten_puppy.png"
+if PET_IMAGE_PATH.exists():
+    st.image(
+        str(PET_IMAGE_PATH),
+        caption="Little paws, big discoveries 🐾",
+        use_container_width=True,
+    )
