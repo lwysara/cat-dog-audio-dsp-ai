@@ -1,3 +1,4 @@
+from streamlit_mic_recorder import mic_recorder
 from pathlib import Path
 import hashlib
 import io
