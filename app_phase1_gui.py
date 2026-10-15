@@ -1,96 +1,128 @@
-from pathlib import Path
-import hashlib
-import io
+            if (
+                medians
+                and x is not None
+                and confidence is not None
+                and hasattr(model, "predict_proba")
+                and all(name in medians for name in feature_names)
+            ):
+                pred_class_index = classes.index(pred)
+                impacts = []
 
-import joblib
-import librosa
-import librosa.display
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import streamlit as st
-from scipy.signal import butter, sosfilt
+                for name in feature_names:
+                    altered = x.copy()
+                    altered.loc[0, name] = float(medians[name])
+                    altered_scaled = scaler.transform(altered)
+                    altered_probs = model.predict_proba(altered_scaled)[0]
+                    altered_prob = float(altered_probs[pred_class_index])
 
-# ============================================================
-# Audio DSP AI ＋ Machine Learning — Phase 1 integration
-# Keeps the existing model bundle contract and DSP explanations.
-# ============================================================
+                    impacts.append({
+                        "Feature": name,
+                        "Original_Value": float(x.loc[0, name]),
+                        "Training_Median": float(medians[name]),
+                        "Impact": float(confidence - altered_prob),
+                    })
 
-st.set_page_config(
-    page_title="Audio DSP AI ＋ Machine Learning",
-    page_icon="🎙️",
-    layout="wide",
-)
+                local = pd.DataFrame(impacts)
+                local["Abs_Impact"] = local["Impact"].abs()
+                local = local.sort_values(
+                    "Abs_Impact",
+                    ascending=False,
+                )
 
-# -------------------- Modern GUI theme --------------------
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap');
-:root {
-  --ink: #633D32;
-  --muted: #8A6A5D;
-  --accent: #C9654D;
-  --accent-dark: #8E382D;
-  --line: #EED5C6;
-  --page: #FFF8F2;
-  --surface: #FFFCF9;
-  --tab-bg: #F8EDE5;
-  --tab-active: #FFE5D9;
-}
-html, body, [class*="css"] { font-family: Inter, "Noto Sans TC", sans-serif; }
-html, body, .stApp, [data-testid="stAppViewContainer"] {
-  background: var(--page) !important;
-  color: var(--ink) !important;
-}
-.block-container { max-width: 1500px; padding-top: 1.5rem; padding-bottom: 3rem; }
-[data-testid="stSidebar"] { background: linear-gradient(180deg,#8E5140 0%,#633D32 100%) !important; border-right: 1px solid #D9B5A3; }
-[data-testid="stSidebar"] * { color: #FFF8F2; }
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: #F7E4D9; }
-h1, h2, h3 { color: var(--ink) !important; letter-spacing: -.025em; }
-h1 { font-weight: 800 !important; }
-[data-testid="stMetric"] { background: linear-gradient(135deg,#FFFCF9,#F8EDE5) !important; border: 1px solid var(--line); padding: 18px 20px; border-radius: 18px; box-shadow: 0 8px 24px rgba(99,61,50,.06); }
-[data-testid="stMetricLabel"] { color: var(--muted) !important; font-weight: 600; }
-[data-testid="stMetricValue"] { color: var(--accent-dark) !important; font-weight: 800; }
-div[data-testid="stVerticalBlockBorderWrapper"] { border-radius: 18px; }
-.stButton > button[kind="primary"] { background: linear-gradient(90deg,#D97860,#E85D4F) !important; color: #FFFFFF !important; border: 0; border-radius: 12px; min-height: 3rem; font-weight: 700; box-shadow: 0 7px 18px rgba(217,95,80,.18); }
-.stButton > button[kind="primary"]:hover { border: 0; filter: brightness(1.04); box-shadow: 0 9px 24px rgba(217,95,80,.24); }
-.stButton > button, .stDownloadButton > button { border-radius: 11px; }
-[data-testid="stFileUploader"] { background: #FFF1E8 !important; border: 1.5px dashed #D9A995; border-radius: 16px; padding: 12px; }
-[data-testid="stAudioInput"] { background: #FFF1E8 !important; border-radius: 14px; padding: 10px; }
+                chart = local.head(10).sort_values("Impact")
+                fig, ax = plt.subplots(figsize=(9, 5))
+                ax.barh(chart["Feature"], chart["Impact"])
+                ax.axvline(0, linestyle="--")
+                ax.set_xlabel(
+                    "Original class probability − probability after median replacement"
+                )
+                ax.grid(axis="x", alpha=0.2)
+                fig.tight_layout()
+                st.pyplot(fig)
+                plt.close(fig)
 
-/* Warm four-tab navigation: all tab labels and nested elements stay readable */
-.stTabs, div[data-testid="stTabs"] { margin-top: 12px; }
-.stTabs [data-baseweb="tab-list"],
-div[data-testid="stTabs"] [role="tablist"] {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  align-items: stretch !important;
-  gap: 8px !important;
-  background: var(--page) !important;
-  padding: 8px 0 !important;
-  border-bottom: 2px solid var(--line) !important;
-}
-.stTabs [data-baseweb="tab"],
-div[data-testid="stTabs"] button[data-baseweb="tab"],
-div[data-testid="stTabs"] button[role="tab"],
-div[data-testid="stTabs"] [role="tab"] {
-  box-sizing: border-box !important;
-  min-height: 48px !important;
-  padding: 10px 16px !important;
-  margin: 0 !important;
-  background: var(--tab-bg) !important;
-  color: var(--ink) !important;
-  -webkit-text-fill-color: var(--ink) !important;
-  border: 1px solid var(--line) !important;
-  border-bottom: 4px solid transparent !important;
-  border-radius: 10px 10px 0 0 !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 1.4 !important;
-  opacity: 1 !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-.stTabs [data-baseweb="tab"] *,
-div[data-testid="stTabs"] button[data-baseweb="tab"] *,
-div[data-testid="stTabs"] button[role="tab"] *,
+                shown = local.head(15).copy()
+                shown["Impact (%)"] = (shown["Impact"] * 100).round(2)
+                st.dataframe(
+                    shown[
+                        [
+                            "Feature",
+                            "Original_Value",
+                            "Training_Median",
+                            "Impact (%)",
+                        ]
+                    ],
+                    use_container_width=True,
+                )
+            else:
+                st.info(
+                    "模型檔未提供完整 training_medians，或模型不支援機率輸出；"
+                    "因此略過 Local Feature Impact。"
+                )
+
+            st.subheader("⑧ 模型評估（訓練時保存）")
+            if "test_accuracy" in bundle:
+                st.metric(
+                    "Hold-out Test Accuracy",
+                    f"{float(bundle['test_accuracy']) * 100:.2f}%",
+                )
+                st.caption(
+                    "這是訓練時保留測試集的結果，不是目前上傳音訊的正確率。"
+                )
+
+            if "confusion_matrix" in bundle:
+                cm = np.asarray(bundle["confusion_matrix"])
+                if cm.ndim == 2:
+                    fig, ax = plt.subplots(figsize=(5, 4))
+                    im = ax.imshow(cm)
+                    tick_labels = ["Cat", "Dog"]
+                    ax.set_xticks(range(cm.shape[1]))
+                    ax.set_yticks(range(cm.shape[0]))
+                    ax.set_xticklabels(tick_labels[:cm.shape[1]])
+                    ax.set_yticklabels(tick_labels[:cm.shape[0]])
+                    ax.set_xlabel("Predicted")
+                    ax.set_ylabel("Actual")
+                    ax.set_title("Confusion Matrix")
+                    for i in range(cm.shape[0]):
+                        for j in range(cm.shape[1]):
+                            ax.text(
+                                j,
+                                i,
+                                int(cm[i, j]),
+                                ha="center",
+                                va="center",
+                            )
+                    fig.colorbar(im, ax=ax)
+                    fig.tight_layout()
+                    st.pyplot(fig)
+                    plt.close(fig)
+
+            if "classification_report" in bundle:
+                with st.expander("查看 Classification Report"):
+                    report_df = pd.DataFrame(bundle["classification_report"]).T
+                    st.dataframe(report_df, use_container_width=True)
+
+        st.subheader("⑨ Engineering Interpretation")
+        st.markdown(
+            """
+```text
+Audio Input
+    ↓
+Audio Decode / Mono / 22.05 kHz
+    ↓
+300–4000 Hz Band-pass Filter
+    ↓
+22 DSP Features
+    ↓
+Cat / Dog Random Forest (classification mode only)
+    ↓
+Prediction + DSP Plots + Explainability
+```
+
+**注意：Feature Importance / Local Feature Impact 是模型解釋，不是物理因果證明。**
+"""
+        )
+
+    except Exception as exc:
+        st.error(f"音訊分析失敗：{exc}")
+        st.exception(exc)
