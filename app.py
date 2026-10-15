@@ -1,4 +1,24 @@
 from pathlib import Path
+import joblib
+
+import streamlit as st
+import numpy as np
+import pandas as pd
+import librosa
+import librosa.display
+import matplotlib.pyplot as plt
+from scipy.signal import butter, sosfilt
+
+# ========================================
+# Load Cat & Dog AI Model
+# ========================================
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / "models" / "cat_dog_model.joblib"
+
+model = joblib.load(MODEL_PATH)
+
+
+from pathlib import Path
 import io
 import numpy as np
 import pandas as pd
