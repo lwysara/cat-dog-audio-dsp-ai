@@ -306,37 +306,28 @@ if input_source == "File Upload":
         help="支援 WAV、MP3、FLAC、M4A、OGG、AIFF 等格式；實際解碼能力取決於部署環境。",
         key="phase1_audio_file_uploader",
     )
-    selected_source = uploaded_file
 else:
-    # st.audio_input uses the browser's native microphone permission flow.
-    # It requires Streamlit >= 1.39.0 and an HTTPS page (Streamlit Cloud is HTTPS).
-    if hasattr(st, "audio_input"):
-        try:
-            recorded_audio = st.audio_input(
-                "🎙️ 點擊錄音按鍵，開始錄製音訊",
-                help=(
-                    "第一次使用時，請在瀏覽器權限提示中允許麥克風。"
-                    "錄音完成後，元件會顯示錄音播放控制；再按下方「開始分析」。"
-                ),
-                key="phase1_audio_recorder",
-            )
-            selected_source = recorded_audio
-            if recorded_audio is None:
-                st.info(
-                    "麥克風已準備就緒。請按錄音元件的麥克風按鍵，"
-                    "允許瀏覽器存取麥克風，完成錄音後再開始分析。"
-                )
-        except Exception as exc:
-            st.error(f"麥克風元件啟動失敗：{exc}")
-            st.info(
-                "請確認瀏覽器麥克風權限已允許，並在 GitHub 的 requirements.txt "
-                "設定 streamlit>=1.39.0，然後重新部署。"
-            )
-    else:
-        st.error(
-            "目前部署環境的 Streamlit 版本不支援 st.audio_input。"
-            "請在 requirements.txt 加入 streamlit>=1.39.0，提交 GitHub 後重新部署。"
+    st.write("🎙️ 麥克風錄音")
+
+    try:
+        recorded_audio = mic_recorder(
+            start_prompt="🎙️ 開始錄音",
+            stop_prompt="⏹️ 停止錄音",
+            just_once=False,
+            use_container_width=True,
+            key="phase1_audio_recorder",
         )
+
+        if recorded_audio and recorded_audio.get("bytes"):
+            selected_source = io.BytesIO(recorded_audio["bytes"])
+            selected_source.name = "microphone_recording.wav"
+        else:
+            selected_source = None
+            st.info("請點擊「開始錄音」，錄音完成後點擊「停止錄音」。")
+
+    except Exception as exc:
+        selected_source = None
+        st.error(f"麥克風啟動失敗：{exc}")
         st.code("streamlit>=1.39.0", language="text")
 
 analysis_mode = st.selectbox(
